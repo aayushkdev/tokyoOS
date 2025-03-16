@@ -1,5 +1,6 @@
 #include <idt.h>
 #include <isr.h>
+#include <gdt.h>
 
 
 //__attribute__((aligned(0x10))) 

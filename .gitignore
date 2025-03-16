@@ -2,3 +2,4 @@ struct
 bin/
 dist/
 isoDir/
+.vscode

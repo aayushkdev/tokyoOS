@@ -1,10 +1,10 @@
 #include <serial.h>
 #include <stdarg.h>
 #include <system.h>
+#include <print.h>
 
 static int currentSerial = COM1;
 
-// Initialize the serial port
 int initSerial(int device) {
     currentSerial = device;
     outb(device + 1, 0x00);  // Disable all interrupts
@@ -36,11 +36,11 @@ void write_serial(char a) {
     outb(currentSerial, a);
 }
 
-// Write a string to the serial port
-void writeSerial(char *str) {
-    while (*str) {
-        write_serial(*str++);
-    }
+void writeSerial(const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    vsprintf(write_serial, format, args);
+    va_end(args);
 }
 
 

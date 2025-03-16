@@ -5,88 +5,96 @@ static uint64_t cursor_x = 0;
 static uint64_t cursor_y = 0;
 static const uint64_t line_height = 24;
 static const uint64_t line_width = 24;
+static const uint64_t max_height = 720;
 
+void newline() {
+    cursor_x = 0;
+    cursor_y += line_height;
+    if (cursor_y >= max_height) {
+        cursor_y = max_height - line_height;
+    }
+}
 
-//prints individual characters
 void putc(char c) {
     if (c == '\n') {
-        cursor_y+=line_height;
-        cursor_x = 0;
+        newline();
     } else {
         drawChar(cursor_x, cursor_y, c, 0xFFFFFF);
-        cursor_x+=line_width;
-
+        cursor_x += line_width;
         if (cursor_x >= fb_info.width) {
-            cursor_y+=line_height;
-            cursor_x = 0;
+            newline();
         }
     }
 }
 
-
-// Helper function to print a decimal number
-void printDec(int num) {
+void itoa(int num, char *str, int base) {
+    int i = 0, isNegative = 0;
     if (num == 0) {
-        putc('0');
+        str[i++] = '0';
+        str[i] = '\0';
         return;
     }
-
-    if (num < 0) { // Handle negative numbers
-        putc('-');
+    if (num < 0 && base == 10) {
+        isNegative = 1;
         num = -num;
     }
-
-    char buffer[20];
-    int i = 0;
-
-    while (num > 0) {
-        buffer[i++] = '0' + (num % 10);
-        num /= 10;
+    while (num != 0) {
+        int rem = num % base;
+        str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
+        num /= base;
     }
-
-    while (i > 0) {
-        putc(buffer[--i]);
+    if (isNegative)
+        str[i++] = '-';
+    str[i] = '\0';
+    for (int j = 0, k = i - 1; j < k; j++, k--) {
+        char temp = str[j];
+        str[j] = str[k];
+        str[k] = temp;
     }
 }
 
-// printf implementation with support for %d, %s, %c
-void print(const char *format, ...) {
-    va_list args;
-    va_start(args, format);
-
+void vsprintf(void (*outputFunc)(char), const char *format, va_list args) {
+    char buffer[32];
     while (*format) {
         if (*format == '%') {
-            format++; // Move past '%'
+            format++;
             switch (*format) {
-                case 'd': { // Decimal integer
-                    int num = va_arg(args, int);
-                    printDec(num);
+                case 'd':
+                    itoa(va_arg(args, int), buffer, 10);
+                    for (char *p = buffer; *p; p++) outputFunc(*p);
                     break;
-                }
-                case 's': { // String
-                    char *str = va_arg(args, char *);
-                    print(str);
+                case 'x':
+                case 'p':
+                    itoa(va_arg(args, unsigned int), buffer, 16);
+                    outputFunc('0'); outputFunc('x');
+                    for (char *p = buffer; *p; p++) outputFunc(*p);
                     break;
-                }
-                case 'c': { // Character
-                    char c = (char)va_arg(args, int);
-                    putc(c);
+                case 's':
+                    for (char *p = va_arg(args, char *); *p; p++) outputFunc(*p);
                     break;
-                }
-                case '%': { // Literal '%'
-                    putc('%');
+                case 'c':
+                    outputFunc((char)va_arg(args, int));
                     break;
-                }
+                case '%':
+                    outputFunc('%');
+                    break;
                 default:
-                    putc('%');
-                    putc(*format); // Print unknown specifier as-is
+                    outputFunc('%');
+                    outputFunc(*format);
                     break;
             }
         } else {
-            putc(*format); // Regular character, print directly
+            outputFunc(*format);
         }
-        format++; // Move to next character
+        format++;
     }
+}
 
+
+
+void printf(const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    vsprintf(putc, format, args);
     va_end(args);
 }

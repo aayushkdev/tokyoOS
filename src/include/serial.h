@@ -7,5 +7,4 @@
 #define COM4 0x2e8          // COM4
 
 int initSerial(int device);
-void writeSerial(char *a);
-void write_serial(char a);
+void writeSerial(const char *format, ...) ;

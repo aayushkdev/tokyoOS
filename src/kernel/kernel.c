@@ -13,12 +13,12 @@
 void _start(void) {
     initialiseFrameBuffer();
     if (initSerial(COM1) != 0) {
-        print("Error: Failed to initialize COM1 serial port.\n");
+        printf("Error: Failed to initialize COM1 serial port.\n");
     }
     initSerial(COM1);
     initiateGDT();
     load_idt();
-    print("---Tokyo OS---");
+    printf("---Tokyo OS---");
     while (1) {
         asm volatile("hlt"); 
     }

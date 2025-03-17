@@ -5,7 +5,7 @@
 
 static int currentSerial = COM1;
 
-int initSerial(int device) {
+int init_serial(int device) {
     currentSerial = device;
     outb(device + 1, 0x00);  // Disable all interrupts
     outb(device + 3, 0x80);  // Enable DLAB

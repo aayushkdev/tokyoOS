@@ -9,15 +9,13 @@
 #include <gdt.h>
 
 
-// Kernel entry point
 void _start(void) {
-    initialiseFrameBuffer();
-    if (initSerial(COM1) != 0) {
+    init_framebuffer();
+    if (init_serial(COM1) != 0) {
         printf("Error: Failed to initialize COM1 serial port.\n");
     }
-    initSerial(COM1);
-    initiateGDT();
-    load_idt();
+    init_gdt();
+    init_idt();
     printf("---Tokyo OS---");
     while (1) {
         asm volatile("hlt"); 

@@ -21,7 +21,7 @@ typedef struct GDTPtr {
 
 #define GDT_ENTRY_COUNT 3
 
-void initiateGDT();
+void init_gdt();
 
 
 

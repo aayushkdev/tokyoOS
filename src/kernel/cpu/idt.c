@@ -22,7 +22,7 @@ void set_idt(uint8_t vector, void* isr, uint8_t flags) {
 }
 
 
-void load_idt() {
+void init_idt() {
     idtr.base = (uint64_t)&idt;   // Base address of the IDT
     idtr.limit = sizeof(idt) - 1; // Size of the IDT
 

@@ -14,7 +14,7 @@ struct fb_info {
 extern struct fb_info fb_info;
 
 // Function declarations
-void initialiseFrameBuffer(void);
+void init_framebuffer(void);
 
 void clearScreen(uint32_t color);
 

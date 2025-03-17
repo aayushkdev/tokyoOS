@@ -6,5 +6,5 @@
 #define COM3 0x3e8          // COM3
 #define COM4 0x2e8          // COM4
 
-int initSerial(int device);
+int init_serial(int device);
 void writeSerial(const char *format, ...) ;

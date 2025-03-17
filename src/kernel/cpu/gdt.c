@@ -40,7 +40,7 @@ void gdt_reload() {
 }
 
 
-void initiateGDT() {
+void init_gdt() {
     set_gdt_entry(0, 0, 0);         
     set_gdt_entry(1, 0x9A, 0xA0);  //kernel code
     set_gdt_entry(2, 0x92, 0x00);  //kernel data

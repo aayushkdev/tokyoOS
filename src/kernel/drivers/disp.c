@@ -17,7 +17,7 @@ struct fb_info fb_info = {
 };
 
 // Function to initialize the framebuffer
-void initialiseFrameBuffer(void) {
+void init_framebuffer(void) {
     if (framebuffer_request.response == NULL || framebuffer_request.response->framebuffer_count < 1) {
         writeSerial("Error: Failed to initialize framebuffer. No framebuffer found or invalid response.\n");
         return;

@@ -3,20 +3,17 @@
 #include <hackFont.h>
 #include <serial.h>
 
-// Define the framebuffer request
 volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
     .revision = 0
 };
 
-// Define a global framebuffer info structure
 struct fb_info fb_info = {
     .width = 0,
     .height = 0,
     .framebuffer = NULL
 };
 
-// Function to initialize the framebuffer
 void init_framebuffer(void) {
     if (framebuffer_request.response == NULL || framebuffer_request.response->framebuffer_count < 1) {
         writeSerial("Error: Failed to initialize framebuffer. No framebuffer found or invalid response.\n");

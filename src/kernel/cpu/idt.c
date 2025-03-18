@@ -4,7 +4,7 @@
 
 
 //__attribute__((aligned(0x10))) 
-static idt_entry_t idt[256]; // Create an array of IDT entries; aligned for performance
+static idt_entry_t idt[256]; 
 static idtr_t idtr;
 
 //static GDT_KERNEL_CODE = 0x80;
@@ -23,8 +23,8 @@ void set_idt(uint8_t vector, void* isr, uint8_t flags) {
 
 
 void init_idt() {
-    idtr.base = (uint64_t)&idt;   // Base address of the IDT
-    idtr.limit = sizeof(idt) - 1; // Size of the IDT
+    idtr.base = (uint64_t)&idt;  
+    idtr.limit = sizeof(idt) - 1; 
 
 
     set_idt(0, isr0, 0x8E);

@@ -7,32 +7,34 @@ static int currentSerial = COM1;
 
 int init_serial(int device) {
     currentSerial = device;
-    outb(device + 1, 0x00);  // Disable all interrupts
-    outb(device + 3, 0x80);  // Enable DLAB
-    outb(device + 0, 0x03);  // Set divisor to 3 (38400 baud)
+    outb(device + 1, 0x00); 
+    outb(device + 3, 0x80);  
+    outb(device + 0, 0x03); 
     outb(device + 1, 0x00);  
-    outb(device + 3, 0x03);  // 8 bits, no parity, one stop bit
-    outb(device + 2, 0xC7);  // Enable FIFO, clear with 14-byte threshold
-    outb(device + 4, 0x0B);  // IRQs enabled, RTS/DSR set
-    outb(device + 4, 0x1E);  // Set in loopback mode
-    outb(device + 0, 0xAE);  // Test the serial chip
+    outb(device + 3, 0x03); 
+    outb(device + 2, 0xC7); 
+    outb(device + 4, 0x0B); 
+    outb(device + 4, 0x1E); 
+    outb(device + 0, 0xAE);  
 
     if (inb(device + 0) != 0xAE) {
-        return 1;  // Faulty serial port
+        return 1;  
     }
 
-    outb(device + 4, 0x0F);  // Set normal operation mode
+    outb(device + 4, 0x0F); 
     return 0;
 }
 
-// Check if the transmit buffer is empty
 int is_transmit_empty() {
     return inb(currentSerial + 5) & 0x20;
 }
 
-// Write a single character to the serial port
 void write_serial(char a) {
     while (!is_transmit_empty());
+    if (a == '\n') {
+        outb(currentSerial, '\r'); 
+        while (!is_transmit_empty());
+    }
     outb(currentSerial, a);
 }
 

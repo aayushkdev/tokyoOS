@@ -16,7 +16,12 @@ void _start(void) {
     }
     init_gdt();
     init_idt();
-    printf("---Tokyo OS---");
+
+
+    printf("------------------\n");
+    printf("-    Tokyo OS    -\n");
+    printf("------------------\n");
+    
     while (1) {
         asm volatile("hlt"); 
     }

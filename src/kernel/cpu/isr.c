@@ -4,8 +4,8 @@
 #include <serial.h>
 #include <system.h>
 
-void interrupt_handler(uint64_t vector_number, uint64_t error_code) {
-    switch (vector_number) {
+cpu_status_t *interrupt_dispatch(cpu_status_t *context) {
+    switch (context->vector_number) {
         case 0:
             writeSerial("Divide by zero error.\n");
             break;
@@ -13,18 +13,19 @@ void interrupt_handler(uint64_t vector_number, uint64_t error_code) {
             writeSerial("Invalid opcode.\n");
             break;
         case 8:
-            writeSerial("Double fault, Error Code: %d\n", error_code);
+            writeSerial("Double fault, Error Code: %d\n", context->error_code);
             break;
         case 13:
-            writeSerial("General protection fault, Error Code: %d\n", error_code);
+            writeSerial("General protection fault, Error Code: %d\n", context->error_code);
             break;
         case 14:
-            writeSerial("Page fault, Error Code: %d\n", error_code);
+            writeSerial("Page fault, Error Code: %d\n", context->error_code);
             break;
         default:
-            writeSerial("Unhandled interrupt: %d\n", vector_number);
+            writeSerial("Unhandled interrupt: %d\n", context->vector_number);
             break;
     }
 
     panic();
+    return context;
 }

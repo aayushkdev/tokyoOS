@@ -1,5 +1,5 @@
 [bits  64]
-[extern interrupt_handler]
+[extern interrupt_dispatch]
 
 
 
@@ -21,10 +21,10 @@ isr_common:
     push r14
     push r15
 
-    mov rdi, [rsp + 120]  ; interrupt vector
-    mov rsi, [rsp + 128]  ; error code
+    mov rdi, rsp
     
-    call interrupt_handler
+    call interrupt_dispatch
+    mov rsp, rax
 
     ; Restore all general-purpose registers
     pop r15

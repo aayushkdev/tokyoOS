@@ -1,4 +1,5 @@
 #include <disp.h>
+#include <kprintf.h>
 #include <stdarg.h>
 
 static uint64_t cursor_x = 0;
@@ -15,7 +16,7 @@ void newline() {
     }
 }
 
-void putc(char c) {
+static void framebuffer_putc(char c) {
     if (c == '\n') {
         newline();
     } else {
@@ -53,7 +54,7 @@ void itoa(int num, char *str, int base) {
     }
 }
 
-void vsprintf(void (*outputFunc)(char), const char *format, va_list args) {
+void kvprintf(void (*outputFunc)(char), const char *format, va_list args) {
     char buffer[32];
     while (*format) {
         if (*format == '%') {
@@ -92,9 +93,9 @@ void vsprintf(void (*outputFunc)(char), const char *format, va_list args) {
 
 
 
-void printf(const char *format, ...) {
+void kprintf(const char *format, ...) {
     va_list args;
     va_start(args, format);
-    vsprintf(putc, format, args);
+    kvprintf(framebuffer_putc, format, args);
     va_end(args);
 }

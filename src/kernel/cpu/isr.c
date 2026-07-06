@@ -1,7 +1,6 @@
 #include <isr.h>
 #include <stdint.h>
 #include <idt.h>
-#include <print.h>
 #include <serial.h>
 #include <system.h>
 

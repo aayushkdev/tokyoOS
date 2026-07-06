@@ -1,7 +1,7 @@
 #include <serial.h>
 #include <stdarg.h>
 #include <system.h>
-#include <print.h>
+#include <kprintf.h>
 
 static int currentSerial = COM1;
 
@@ -41,8 +41,7 @@ void write_serial(char a) {
 void writeSerial(const char *format, ...) {
     va_list args;
     va_start(args, format);
-    vsprintf(write_serial, format, args);
+    kvprintf(write_serial, format, args);
     va_end(args);
 }
-
 

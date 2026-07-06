@@ -21,7 +21,8 @@ isr_common:
     push r14
     push r15
 
-    mov rdi, rsp  ; Pass the stack pointer (pointer to the saved registers) as the first argument
+    mov rdi, [rsp + 120]  ; interrupt vector
+    mov rsi, [rsp + 128]  ; error code
     
     call interrupt_handler
 
@@ -42,8 +43,8 @@ isr_common:
     pop rbx
     pop rax
 
-    ; Clean up the error code and interrupt number
-    ;add rsp, 16
+    ; Clean up the interrupt vector and error code.
+    add rsp, 16
 
     ; Return from the interrupt
     iretq

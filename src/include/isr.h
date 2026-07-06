@@ -1,5 +1,8 @@
 #pragma once
 
+#include <stdint.h>
+
+void interrupt_handler(uint64_t vector_number, uint64_t error_code);
 
 extern void isr0();
 extern void isr1();

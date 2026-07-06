@@ -5,10 +5,7 @@
 #include <serial.h>
 #include <system.h>
 
-void interrupt_handler(uint64_t *regs) {
-    uint64_t vector_number = regs[0];
-    uint64_t error_code = regs[1];   
-
+void interrupt_handler(uint64_t vector_number, uint64_t error_code) {
     switch (vector_number) {
         case 0:
             writeSerial("Divide by zero error.\n");

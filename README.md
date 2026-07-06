@@ -14,11 +14,20 @@ Tokyo OS is a hobby operating system written in C, aiming to explore and learn a
 
 ### Prerequisites
 
-* A cross-compiler toolchain for x86_64 (configured to `$(HOME)/opt/cross/bin/x86_64-elf-gcc` and `$(HOME)/opt/cross/bin/x86_64-elf-ld` in the Makefile).
+* A cross-compiler toolchain for x86_64 (`x86_64-elf-gcc` and `x86_64-elf-ld` available in your `PATH`).
 * NASM assembler.
 * xorriso for ISO image creation.
 * Limine bootloader tools (installed and available in your PATH).
 * QEMU or another emulator/virtual machine for testing.
+
+On Arch Linux:
+
+```bash
+sudo pacman -S --needed nasm libisoburn limine qemu-desktop
+yay -S x86_64-elf-binutils x86_64-elf-gcc
+```
+
+The `x86_64-elf-*` cross compiler packages are available from the AUR. The Makefile expects `x86_64-elf-gcc` and `x86_64-elf-ld` to be available in your `PATH`.
 
 ### Building and Running
 

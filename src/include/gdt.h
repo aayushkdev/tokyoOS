@@ -19,10 +19,9 @@ typedef struct GDTPtr {
 } __attribute__((packed)) GDTPtr;
 
 
-#define GDT_ENTRY_COUNT 3
+#define GDT_ENTRY_COUNT 5
 
 void init_gdt();
-
 
 
 

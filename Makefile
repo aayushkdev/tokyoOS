@@ -4,7 +4,7 @@ BUILD_DIR := bin
 DIST_DIR := dist
 
 # Source files
-C_SRC := $(shell find $(SRC_DIR)/kernel $(SRC_DIR)/lib -name '*.c')
+C_SRC := $(shell find $(SRC_DIR)/kernel -name '*.c')
 ASM_SRC := $(SRC_DIR)/kernel/cpu/isr_codes.asm
 
 # Object files
@@ -19,8 +19,8 @@ TARGET := $(DIST_DIR)/kernel.bin
 ISO := $(DIST_DIR)/tokyo.iso
 
 # Compiler and flags
-CC := $(HOME)/opt/cross/bin/x86_64-elf-gcc
-LD := $(HOME)/opt/cross/bin/x86_64-elf-ld
+CC := x86_64-elf-gcc
+LD := x86_64-elf-ld
 AS := nasm
 CFLAGS := -I$(SRC_DIR)/include -ffreestanding -Wall -Wextra -nostdlib -m64 -mcmodel=kernel
 LDFLAGS := -m elf_x86_64 -T $(SRC_DIR)/kernel/linker.ld -z max-page-size=0x1000 -static -nostdlib

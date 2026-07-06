@@ -102,3 +102,7 @@ ISR_NO_ERROR_CODE 28  ; Reserved
 ISR_NO_ERROR_CODE 29  ; Reserved
 ISR_NO_ERROR_CODE 30  ; Reserved
 ISR_NO_ERROR_CODE 31  ; Reserved
+
+ISR_NO_ERROR_CODE 64  ; Local APIC timer
+ISR_NO_ERROR_CODE 65  ; PS/2 keyboard
+ISR_NO_ERROR_CODE 255 ; Local APIC spurious interrupt

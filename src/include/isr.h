@@ -63,3 +63,6 @@ extern void isr28();
 extern void isr29();
 extern void isr30();
 extern void isr31();
+extern void isr64();
+extern void isr65();
+extern void isr255();

@@ -20,3 +20,4 @@ typedef struct {
 
 
 void init_idt();
+void set_idt(uint8_t vector, void* isr, uint8_t flags);

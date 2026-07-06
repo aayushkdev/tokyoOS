@@ -7,6 +7,10 @@
 #include <serial.h>
 #include <idt.h>
 #include <gdt.h>
+#include <acpi.h>
+#include <apic.h>
+#include <timer.h>
+#include <kb.h>
 
 
 void _start(void) {
@@ -17,12 +21,24 @@ void _start(void) {
     init_gdt();
     init_idt();
 
-
     kprintf("------------------\n");
     kprintf("-    Tokyo OS    -\n");
     kprintf("------------------\n");
+    if (init_acpi() == 0) {
+        if (init_apic() == 0 && init_timer() == 0 && init_kb() == 0) {
+            enable_interrupts();
+        }
+    }
     
     while (1) {
+        kb_event_t event;
+        while (kb_read_event(&event)) {
+            char printable = kb_event_to_char(event);
+            if (printable != 0) {
+                kprintf("%c", printable);
+            }
+        }
+
         asm volatile("hlt"); 
     }
 }

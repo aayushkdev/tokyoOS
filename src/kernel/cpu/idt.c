@@ -59,6 +59,9 @@ void init_idt() {
     set_idt(29, isr29, 0x8E);
     set_idt(30, isr30, 0x8E);
     set_idt(31, isr31, 0x8E);
+    set_idt(64, isr64, 0x8E);
+    set_idt(65, isr65, 0x8E);
+    set_idt(255, isr255, 0x8E);
 
     
 

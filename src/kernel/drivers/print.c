@@ -1,5 +1,6 @@
 #include <disp.h>
 #include <kprintf.h>
+#include <stddef.h>
 #include <stdarg.h>
 
 static uint64_t cursor_x = 0;
@@ -28,29 +29,49 @@ static void framebuffer_putc(char c) {
     }
 }
 
-void itoa(int num, char *str, int base) {
-    int i = 0, isNegative = 0;
+static void reverse_string(char *str, int length) {
+    for (int j = 0, k = length - 1; j < k; j++, k--) {
+        char temp = str[j];
+        str[j] = str[k];
+        str[k] = temp;
+    }
+}
+
+static void utoa(uint64_t num, char *str, int base) {
+    int i = 0;
     if (num == 0) {
         str[i++] = '0';
         str[i] = '\0';
         return;
     }
-    if (num < 0 && base == 10) {
-        isNegative = 1;
-        num = -num;
-    }
+
     while (num != 0) {
-        int rem = num % base;
+        uint64_t rem = num % base;
         str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
         num /= base;
     }
-    if (isNegative)
-        str[i++] = '-';
+
     str[i] = '\0';
-    for (int j = 0, k = i - 1; j < k; j++, k--) {
-        char temp = str[j];
-        str[j] = str[k];
-        str[k] = temp;
+    reverse_string(str, i);
+}
+
+static void itoa(int64_t num, char *str, int base) {
+    if (num < 0 && base == 10) {
+        *str++ = '-';
+        utoa((uint64_t)-num, str, base);
+        return;
+    }
+
+    utoa((uint64_t)num, str, base);
+}
+
+static void output_string(void (*outputFunc)(char), const char *str) {
+    if (str == NULL) {
+        str = "(null)";
+    }
+
+    for (const char *p = str; *p; p++) {
+        outputFunc(*p);
     }
 }
 
@@ -62,16 +83,24 @@ void kvprintf(void (*outputFunc)(char), const char *format, va_list args) {
             switch (*format) {
                 case 'd':
                     itoa(va_arg(args, int), buffer, 10);
-                    for (char *p = buffer; *p; p++) outputFunc(*p);
+                    output_string(outputFunc, buffer);
+                    break;
+                case 'u':
+                    utoa(va_arg(args, unsigned int), buffer, 10);
+                    output_string(outputFunc, buffer);
                     break;
                 case 'x':
-                case 'p':
-                    itoa(va_arg(args, unsigned int), buffer, 16);
+                    utoa(va_arg(args, unsigned int), buffer, 16);
                     outputFunc('0'); outputFunc('x');
-                    for (char *p = buffer; *p; p++) outputFunc(*p);
+                    output_string(outputFunc, buffer);
+                    break;
+                case 'p':
+                    utoa((uint64_t)va_arg(args, void *), buffer, 16);
+                    outputFunc('0'); outputFunc('x');
+                    output_string(outputFunc, buffer);
                     break;
                 case 's':
-                    for (char *p = va_arg(args, char *); *p; p++) outputFunc(*p);
+                    output_string(outputFunc, va_arg(args, char *));
                     break;
                 case 'c':
                     outputFunc((char)va_arg(args, int));

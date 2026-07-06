@@ -33,6 +33,19 @@ void disable_interrupts(void) {
     asm volatile("cli");
 }
 
+void reboot(void) {
+    disable_interrupts();
+
+    for (uint32_t i = 0; i < 100000; i++) {
+        if ((inb(0x64) & 0x02) == 0) {
+            outb(0x64, 0xFE);
+            break;
+        }
+    }
+
+    panic();
+}
+
 void panic() {
     disable_interrupts();
     while (1) {

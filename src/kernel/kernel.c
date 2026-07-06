@@ -11,6 +11,7 @@
 #include <apic.h>
 #include <timer.h>
 #include <kb.h>
+#include <shell.h>
 
 
 void _start(void) {
@@ -30,15 +31,5 @@ void _start(void) {
         }
     }
     
-    while (1) {
-        kb_event_t event;
-        while (kb_read_event(&event)) {
-            char printable = kb_event_to_char(event);
-            if (printable != 0) {
-                kprintf("%c", printable);
-            }
-        }
-
-        asm volatile("hlt"); 
-    }
+    shell_run();
 }

@@ -15,4 +15,6 @@ void init_framebuffer(void);
 
 void clearScreen(uint32_t color);
 
+void fillRect(int x, int y, int width, int height, uint32_t color);
+
 void drawChar(int x, int y, char c, uint32_t color);

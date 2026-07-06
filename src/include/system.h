@@ -20,5 +20,8 @@ void enable_interrupts(void);
 // Disable maskable interrupts
 void disable_interrupts(void);
 
+// Reboot through the PS/2 controller when available
+void reboot(void);
+
 //kernel panic
 void panic();

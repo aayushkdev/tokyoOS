@@ -40,6 +40,24 @@ void clearScreen(uint32_t color) {
     }
 }
 
+void fillRect(int x, int y, int width, int height, uint32_t color) {
+    for (int row = 0; row < height; row++) {
+        int py = y + row;
+        if (py < 0 || py >= (int)fb_info.height) {
+            continue;
+        }
+
+        for (int col = 0; col < width; col++) {
+            int px = x + col;
+            if (px < 0 || px >= (int)fb_info.width) {
+                continue;
+            }
+
+            putPixel(px, py, color);
+        }
+    }
+}
+
 void drawChar(int x, int y, char c, uint32_t color) {
     int scale = 3;
     uint8_t* font1 = font[(uint8_t)c];
@@ -56,5 +74,4 @@ void drawChar(int x, int y, char c, uint32_t color) {
         }
     }
 }
-
 

@@ -128,3 +128,18 @@ void kprintf(const char *format, ...) {
     kvprintf(framebuffer_putc, format, args);
     va_end(args);
 }
+
+void kclear(void) {
+    clearScreen(0x000000);
+    cursor_x = 0;
+    cursor_y = 0;
+}
+
+void kbackspace(void) {
+    if (cursor_x < line_width) {
+        return;
+    }
+
+    cursor_x -= line_width;
+    fillRect(cursor_x, cursor_y, line_width, line_height, 0x000000);
+}
